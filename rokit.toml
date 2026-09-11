@@ -1,0 +1,12 @@
+# Rokit pins the exact version of every tool this project uses.
+#
+# Why this matters: if two people build AFTERFALL with different Rojo versions,
+# the project can break in ways that are extremely hard to diagnose. Pinning
+# removes that whole class of problem.
+#
+# Install Rokit once (see README.md), then run `rokit install` in this folder.
+
+[tools]
+rojo = "rojo-rbx/rojo@7.5.1"
+selene = "Kampfkarren/selene@0.28.0"
+stylua = "JohnnyMorganz/StyLua@2.1.0"

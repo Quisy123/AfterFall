@@ -1,0 +1,13 @@
+# Selene catches bugs that the type checker cannot: unused variables, shadowed
+# names, calls to deprecated Roblox APIs, accidental globals.
+#
+# Requires the Roblox standard library definition, generated once with:
+#   selene generate-roblox-std
+# (see README.md). That produces roblox.toml, which IS committed.
+
+std = "roblox"
+
+[rules]
+# Accidentally creating a global is almost always a bug in a Roblox codebase
+# and is a common source of hard-to-trace cross-script interference.
+global_usage = "deny"

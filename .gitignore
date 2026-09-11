@@ -1,0 +1,39 @@
+# ---------------------------------------------------------------------------
+# Roblox place and model files
+# ---------------------------------------------------------------------------
+# These are binary (or enormous XML). Git cannot merge them, so committing them
+# guarantees painful conflicts the moment two people touch the world.
+#
+# The world lives in AfterFall.rbxl on your machine and in Roblox Cloud.
+# The CODE lives here. Rojo joins the two together.
+AfterFall.rbxl
+*.rbxl
+*.rbxlx
+*.rbxl.lock
+*.rbxlx.lock
+
+# Exported models/assets. If we ever want to version a specific asset,
+# we can force-add it with: git add -f path/to/Asset.rbxm
+*.rbxm
+*.rbxmx
+
+# ---------------------------------------------------------------------------
+# Tooling output
+# ---------------------------------------------------------------------------
+/sourcemap.json
+/build/
+.rokit/
+
+# Wally packages (installed from wally.toml; wally.lock IS committed)
+/Packages/
+/ServerPackages/
+/DevPackages/
+
+# ---------------------------------------------------------------------------
+# Editor / OS noise
+# ---------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/

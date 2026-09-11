@@ -1,0 +1,11 @@
+# Automatic code formatting. Run `stylua src/` to format every file.
+# Roblox community convention is tabs, which also respects each person's
+# preferred indent width in their editor.
+
+column_width = 100
+line_endings = "Unix"
+indent_type = "Tabs"
+indent_width = 4
+quote_style = "AutoPreferDouble"
+call_parentheses = "Always"
+collapse_simple_statement = "Never"
