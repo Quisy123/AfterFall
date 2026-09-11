@@ -28,12 +28,21 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Constants = require(Shared:WaitForChild("Constants"))
+local CombatConfig = require(Shared:WaitForChild("Config"):WaitForChild("CombatConfig"))
+
+--[[
+	Requiring Net here is what builds the remote tree in ReplicatedStorage --
+	remotes are created at require time, and on the server this is the first
+	require. Doing it in the bootstrap means the tree exists before any service
+	or client tries to use it.
+]]
+local Net = require(Shared:WaitForChild("Net"))
 
 --[[
 	Services start in this exact order, top to bottom.
 
-	Empty for now -- the foundation has no gameplay in it yet. The first entry
-	will be "PlayerService", followed by "DataService".
+	Empty for now -- Phase A is data, timing and networking only. The first
+	entry will be "DataService", followed by "PlayerService".
 ]]
 local STARTUP_ORDER: { string } = {}
 
@@ -81,8 +90,17 @@ for _, name in STARTUP_ORDER do
 	end
 end
 
+-- Counted rather than hard-coded, so this line cannot drift out of date as
+-- remotes are added.
+local remoteCategories = 0
+for _ in Net do
+	remoteCategories += 1
+end
+
 print(
 	`[AFTERFALL] Server online — {Constants.GAME_NAME}: {Constants.CHAPTER_TITLE}`
 		.. ` | save format v{Constants.DATA_VERSION}`
+		.. ` | {CombatConfig.TICK_RATE}Hz fixed timestep`
+		.. ` | {remoteCategories} remote categories`
 		.. ` | {#STARTUP_ORDER} service(s) started`
 )

@@ -147,7 +147,38 @@ Before committing, from this folder:
 ```
 stylua src/      # reformat everything to the house style
 selene src/      # look for likely bugs
+./tests/run.sh   # run the test suite
 ```
+
+### The test suite
+
+`tests/` runs **outside Roblox** using the Luau command-line tool, so it can
+execute thousands of simulated combat frames in under a second on any machine.
+
+It needs the `luau` binary from
+<https://github.com/luau-lang/luau/releases> (not installed by `rokit install`,
+because that release ships several binaries in one archive). Put it on your
+PATH, or point at it directly:
+
+```
+LUAU=/path/to/luau ./tests/run.sh
+```
+
+What it currently proves:
+
+- **`FrameClock.test.luau`** — that a 30fps phone and a 144fps PC run the
+  identical number of combat frames per second, that a one-second stall drops
+  time instead of spiralling, and that timing stays exact over five minutes of
+  play.
+- **`Config.test.luau`** — that every damage, poise, stamina and frame value
+  matches the design table, and that the key balance relationships hold (a full
+  chain staggers the wolf, three hits do not, the wolf's drop is a visible
+  upgrade).
+
+That second file matters more than it looks. A mistyped config value in a
+data-driven game does not crash anything — the game just quietly plays wrong,
+and everyone spends a week arguing about feel. These checks turn that into a
+failing test.
 
 ---
 
@@ -157,11 +188,15 @@ selene src/      # look for likely bugs
 src/
 ├── shared/            → ReplicatedStorage.Shared   (both sides can read this)
 │   ├── Constants/       Values several systems must agree on
-│   ├── Types/           Shared data shapes
-│   ├── Util/            Small reusable helpers
+│   ├── Types/           Shared data shapes, including the save schema
+│   ├── Util/            FrameClock — the fixed 60Hz timestep
 │   ├── Net/             Every client↔server message, declared in one place
-│   ├── Config/          Designer-tunable tables
-│   └── Definitions/     THE CONTENT LAYER — weapons, attacks, enemies, items
+│   └── Config/          ALL TUNING LIVES HERE
+│         StatConfig     health, stamina, attributes, crit, the damage formula
+│         CombatConfig   timing, hitstop, poise, block, spawn protection
+│         WeaponConfig   weapons and the eight weapon types
+│         MoveConfig     frame data — startup/active/recovery per move
+│         EnemyConfig    the wolf's numbers
 │
 ├── server/            → ServerScriptService.Server  (authoritative)
 │   ├── init.server.luau   Startup order lives here
@@ -181,7 +216,8 @@ The rules this structure enforces, and why, are in
 
 ## What comes next
 
-Foundation (this commit) → core scaffolding → save system → movement →
-combat → training dummy → wolf → XP → loot → equip.
+Phase A (data, timing, networking) is done. Next is Phase B: player stats,
+movement, stamina and spawn protection.
 
-See `docs/ARCHITECTURE.md` for the full roadmap.
+See `docs/ARCHITECTURE.md` for the rules the code is held to and the full
+phase roadmap.

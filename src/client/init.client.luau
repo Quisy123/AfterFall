@@ -17,12 +17,21 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Constants = require(Shared:WaitForChild("Constants"))
+local CombatConfig = require(Shared:WaitForChild("Config"):WaitForChild("CombatConfig"))
+
+--[[
+	On the client, requiring Net waits for the server's remote tree rather than
+	creating it. Doing it here means a controller can assume the remotes exist
+	by the time it starts.
+]]
+local Net = require(Shared:WaitForChild("Net"))
 
 --[[
 	Controllers start in this exact order, top to bottom. A controller may only
 	depend on controllers listed ABOVE it.
 
-	Empty for now. The first entry will be "InputController".
+	Empty for now -- Phase A is data, timing and networking only. The first
+	entry will be "InputController".
 ]]
 local STARTUP_ORDER: { string } = {}
 
@@ -68,7 +77,14 @@ for _, name in STARTUP_ORDER do
 	end
 end
 
+local remoteCategories = 0
+for _ in Net do
+	remoteCategories += 1
+end
+
 print(
 	`[AFTERFALL] Client online — {Constants.GAME_NAME}: {Constants.CHAPTER_TITLE}`
+		.. ` | {CombatConfig.TICK_RATE}Hz fixed timestep`
+		.. ` | {remoteCategories} remote categories received`
 		.. ` | {#STARTUP_ORDER} controller(s) started`
 )

@@ -1,2 +1,0 @@
-Small, reusable, dependency-free helper modules (maths, tables, raycast helpers).
-A Util module must not know anything about AFTERFALL's game systems -- if it does, it belongs in the system that owns it.

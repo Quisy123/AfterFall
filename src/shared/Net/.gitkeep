@@ -1,3 +1,0 @@
-Remote definitions. THE ONLY PLACE IN THE PROJECT WHERE A RemoteEvent OR RemoteFunction MAY BE CREATED.
-One file listing every message that can cross between client and server means the entire attack surface is visible in one screen.
-Remotes created ad-hoc in random scripts are how Roblox games get exploited.
